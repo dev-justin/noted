@@ -2,14 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.Typewriter__wrapper,
-.Typewriter__cursor {
-  @apply text-7xl text-bg-white font-semibold;
-}
-.Typewriter__cursor {
-  @apply text-bg-white/50 font-thin;
-}
-
 #scrollable {
   text-align: right;
 

@@ -1,5 +1,8 @@
 import { MdNote } from "react-icons/md";
 import Link from "next/link";
+import { signOut } from "firebase/auth";
+import { auth } from "../util/firebase";
+
 function Navigation() {
   return (
     <div className="border-2 border-bg-white p-8 rounded-lg flex-col flex shrink-0">
@@ -19,11 +22,12 @@ function Navigation() {
         </Link>
       </div>
       <div>
-        <Link href="logout">
-          <a className="border rounded-lg p-2 text-xs block text-center hover:bg-bg-white hover:text-bg-black transition duration-300 active:scale-95 border-bg-white text-bg-white">
-            Sign Out
-          </a>
-        </Link>
+        <button
+          className="border rounded-lg p-2 text-xs block text-center hover:bg-bg-white hover:text-bg-black transition duration-300 active:scale-95 border-bg-white text-bg-white w-full"
+          onClick={() => signOut(auth)}
+        >
+          Sign Out
+        </button>
       </div>
     </div>
   );
