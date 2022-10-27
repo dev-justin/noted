@@ -7,7 +7,7 @@ import Navigation from "../../../components/Navigation";
 import CreateNote from "../../../components/CreateNote";
 
 // Component
-function index() {
+function CreateNote() {
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
   if (!user && !loading) router.push("/");
@@ -28,4 +28,4 @@ function index() {
   );
 }
 
-export default index;
+export default CreateNote;
