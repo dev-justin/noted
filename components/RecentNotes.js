@@ -12,9 +12,9 @@ function RecentNotes({ notes, user }) {
     });
   };
   return (
-    <div className="border-2 border-bg-white rounded-lg p-8 grid grid-cols-4 gap-4 text-bg-white grow">
+    <div className="border-2 border-bg-white/50 rounded-lg p-8 grid grid-cols-5 grid-rows-3 gap-4 text-bg-white grow">
       <Link href="/note/create">
-        <div className="border border-bg-white rounded-lg p-4 flex justify-center items-center hover:bg-bg-white group transition duration-300 active:scale-95 relative overflow-hidden">
+        <div className="border row-span-full border-bg-white/50 rounded-lg p-4 flex justify-center items-center hover:bg-bg-white group transition duration-300 active:scale-95 relative overflow-hidden">
           <BsPlusCircleDotted className="text-5xl group-hover:text-bg-black" />
           <h3 className="absolute top-0 left-0 uppercase font-extrabold text-4xl opacity-5 break-all">
             Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull; Add
@@ -33,7 +33,10 @@ function RecentNotes({ notes, user }) {
         </div>
       </Link>
       {recentNotes.map((note) => (
-        <div className="border rounded-lg p-4 relative" key={note.id}>
+        <div
+          className="border border-white/50 rounded-lg p-4 relative"
+          key={note.id}
+        >
           <button
             className={clsx(
               "absolute -right-2 -top-3 text-xl hover:text-green-400 hover:scale-125 transition duration-300 ease-out",

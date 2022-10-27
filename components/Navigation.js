@@ -2,10 +2,17 @@ import { MdNote } from "react-icons/md";
 import Link from "next/link";
 import { signOut } from "firebase/auth";
 import { auth } from "../util/firebase";
+import { useRouter } from "next/router";
 
 function Navigation() {
+  const router = useRouter();
+  // Sign out function
+  const signOutUser = () => {
+    signOut(auth);
+    router.push("/");
+  };
   return (
-    <div className="border-2 border-bg-white p-8 rounded-lg flex-col flex shrink-0">
+    <div className="border-2 border-bg-white/50 p-8 rounded-lg flex-col flex shrink-0">
       <div>
         <div className="flex text-bg-white items-center text-2xl font-bold">
           <MdNote className="text-3xl" />
@@ -24,7 +31,7 @@ function Navigation() {
       <div>
         <button
           className="border rounded-lg p-2 text-xs block text-center hover:bg-bg-white hover:text-bg-black transition duration-300 active:scale-95 border-bg-white text-bg-white w-full"
-          onClick={() => signOut(auth)}
+          onClick={() => signOutUser()}
         >
           Sign Out
         </button>
