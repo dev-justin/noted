@@ -1,6 +1,8 @@
 // NextJS
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
 // React Native
 import { useState } from "react";
 // Quill
@@ -16,6 +18,7 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../util/firebase";
 
 function CreateNote({ uid }) {
+  const router = useRouter();
   const [note, setNote] = useState("");
   const formik = useFormik({
     initialValues: {
@@ -34,12 +37,13 @@ function CreateNote({ uid }) {
       });
       values.title = "";
       setNote("");
+      router.push("/mind");
     },
   });
 
   return (
-    <div className="bg-bg-black flex">
-      <main className="w-full flex flex-col">
+    <div className="border-2 border-white/50 rounded-lg p-8 h-full overflow-hidden relative flex justify-center items-center ">
+      <div className="w-full flex flex-col z-10 relative bg-white/40 backdrop-blur-lg rounded-lg px-8 py-4 border-2 border-white/40 shadow-lg max-w-[900px]">
         <div className="relative flex sm:justify-center items-center pb-2">
           <div className="sm:absolute left-0 bottom-0">
             <Link href="/mind">
@@ -73,7 +77,7 @@ function CreateNote({ uid }) {
               type="title"
               name="title"
               id="title"
-              className="block w-full border-0 p-0 text-bg-white placeholder-gray-500 focus:ring-0 sm:text-xl bg-transparent outline-none font-extrabold"
+              className="block w-full border-0 p-0 text-bg-white placeholder-white/40 focus:ring-0 sm:text-xl bg-transparent outline-none"
               placeholder="Guide to the Galaxy"
               required
               onChange={formik.handleChange}
@@ -108,7 +112,7 @@ function CreateNote({ uid }) {
             theme="snow"
             value={note}
             onChange={setNote}
-            className="text-bg-white rounded-lg h-[calc(100vh-351px)]"
+            className="text-bg-white rounded-lg h-[calc(100vh-451px)]"
           />
           <button
             type="submit"
@@ -117,7 +121,13 @@ function CreateNote({ uid }) {
             Noted
           </button>
         </form>
-      </main>
+      </div>
+      <Image
+        src="/images/featuredimage.jpg"
+        layout="fill"
+        objectFit="cover"
+        className="z-0"
+      ></Image>
     </div>
   );
 }

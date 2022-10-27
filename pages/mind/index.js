@@ -13,17 +13,17 @@ function Mind() {
   const router = useRouter();
 
   const [notes] = useCollectionData(
-    user
+    user && !loading
       ? query(
           collection(db, "users", user.uid, "notes"),
           orderBy("date", "desc"),
-          limit(4)
+          limit(13)
         )
       : null
   );
 
   const [pinnedNotes, loadingNotes, errorNotes] = useCollectionData(
-    user
+    user && !loading
       ? query(
           collection(db, "users", user.uid, "notes"),
           where("pinned", "==", true),

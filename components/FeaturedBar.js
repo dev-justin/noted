@@ -47,6 +47,7 @@ function FeaturedBar({ notes, user }) {
         src="/images/featuredimage.jpg"
         layout="fill"
         objectFit="cover"
+        objectPosition={"top"}
         className="z-0 absolute top-0 left-0"
       ></Image>
     </div>
