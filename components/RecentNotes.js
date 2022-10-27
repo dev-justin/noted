@@ -2,7 +2,7 @@ import { BsPlusCircleDotted } from "react-icons/bs";
 import Link from "next/link";
 
 function RecentNotes({ notes }) {
-  const noteList = notes.docs.map((note) => note.data()).splice(0, 3);
+  const recentNotes = notes.slice(0, 3);
 
   return (
     <div className="border-2 border-bg-white rounded-lg p-8 grid grid-cols-4 gap-4 text-bg-white grow">
@@ -25,7 +25,7 @@ function RecentNotes({ notes }) {
           </h3>
         </div>
       </Link>
-      {noteList.map((note) => (
+      {recentNotes.map((note) => (
         <div className="border rounded-lg p-4">
           <h3 className="font-bold text-xl">{note.title}</h3>
           <p

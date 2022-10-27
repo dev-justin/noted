@@ -4,8 +4,8 @@ import RecentNotes from "../../components/RecentNotes";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../util/firebase";
 import { useRouter } from "next/router";
-import { collection } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
+import { collection, query, orderBy, limit } from "firebase/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 import { db } from "../../util/firebase";
 
 function Mind() {
@@ -14,10 +14,15 @@ function Mind() {
 
   if (!user && !loading) return router.push("/");
 
-  const [notes, loadingNotes, errorNotes] = useCollection(
-    user ? collection(db, "users", user.uid, "notes") : null
+  const [notes, loadingNotes, errorNotes] = useCollectionData(
+    user
+      ? query(
+          collection(db, "users", user.uid, "notes"),
+          orderBy("date", "desc"),
+          limit(4)
+        )
+      : null
   );
-
   return (
     user &&
     notes && (
