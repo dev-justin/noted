@@ -12,7 +12,7 @@ import { BiArrowBack } from "react-icons/bi";
 import { useFormik } from "formik";
 
 // Firebase
-import { collection, addDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { db } from "../util/firebase";
 
 function CreateNote({ uid }) {
@@ -20,13 +20,17 @@ function CreateNote({ uid }) {
   const formik = useFormik({
     initialValues: {
       title: "",
+      pinned: false,
     },
     onSubmit: async (values) => {
-      await addDoc(collection(db, "users", uid, "notes"), {
+      const newDocRef = doc(collection(db, "users", uid, "notes"));
+      await setDoc(newDocRef, {
         title: values.title,
         note: note,
         date: new Date(),
         uid,
+        id: newDocRef.id,
+        pinned: values.pinned,
       });
       values.title = "";
       setNote("");
@@ -76,11 +80,35 @@ function CreateNote({ uid }) {
               value={formik.values.title}
             />
           </div>
+          <fieldset>
+            <legend className="sr-only">Pin note</legend>
+            <div className="relative flex items-start">
+              <div className="flex h-5 items-center">
+                <input
+                  id="pinned"
+                  aria-describedby="pinned-description"
+                  name="pinned"
+                  type="checkbox"
+                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  onChange={formik.handleChange}
+                  value={true}
+                />
+              </div>
+              <div className="ml-3 text-sm">
+                <label
+                  htmlFor="pinned"
+                  className=" text-bg-white font-semibold"
+                >
+                  Pin this note
+                </label>
+              </div>
+            </div>
+          </fieldset>
           <ReactQuill
             theme="snow"
             value={note}
             onChange={setNote}
-            className="text-bg-white rounded-lg h-[calc(100vh-318px)]"
+            className="text-bg-white rounded-lg h-[calc(100vh-351px)]"
           />
           <button
             type="submit"
