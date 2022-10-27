@@ -12,8 +12,6 @@ function Mind() {
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
 
-  if (!user && !loading) return router.push("/");
-
   const [notes] = useCollectionData(
     user
       ? query(
@@ -34,6 +32,8 @@ function Mind() {
         )
       : null
   );
+
+  if (!user && !loading) return router.push("/");
 
   return (
     user &&

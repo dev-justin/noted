@@ -7,7 +7,9 @@ function Home() {
   const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
 
-  if (user) router.push("/mind");
+  if (user) {
+    router.push("/mind");
+  }
 
   return (
     <>
