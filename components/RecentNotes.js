@@ -28,7 +28,7 @@ function RecentNotes({ notes, user }) {
     <div className="border-2 border-bg-white/50 rounded-lg p-8 text-bg-white grow relative overflow-clip">
       <div className="relative z-10 grid grid-cols-4 grid-rows-1 gap-4 ">
         <Link href="/note/create">
-          <div className="border row-span-full  rounded-lg p-4 flex justify-center items-center hover:bg-bg-white group transition duration-300 active:scale-95 relative overflow-hidden bg-bg-white/20 backdrop-blur-lg border-white/30 shadow-md">
+          <button className="border row-span-full  rounded-lg p-4 flex justify-center items-center hover:bg-bg-white group transition duration-300 active:scale-95 relative overflow-hidden bg-bg-white/20 backdrop-blur-lg border-white/30 shadow-md">
             <BsPlusCircleDotted className="text-5xl group-hover:text-bg-black" />
             <h3 className="absolute top-0 left-0 uppercase font-extrabold text-4xl opacity-5 break-all">
               Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
@@ -39,10 +39,10 @@ function RecentNotes({ notes, user }) {
               Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
               Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
             </h3>
-          </div>
+          </button>
         </Link>
         {recentNotes.map((note) => (
-          <div
+          <button
             className="border rounded-lg p-4 relative bg-bg-white/20 backdrop-blur-lg border-white/30 shadow-md group"
             key={note.id}
             onClick={() => showNoteOnClick(note)}
@@ -81,7 +81,7 @@ function RecentNotes({ notes, user }) {
                     : note.note,
               }}
             ></p>
-          </div>
+          </button>
         ))}
       </div>
       <Image
