@@ -4,12 +4,25 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../util/firebase";
 import { clsx } from "clsx";
 import Image from "next/image";
+import NotePopup from "./NotePopup";
+import { useState } from "react";
+
 function RecentNotes({ notes, user }) {
   const recentNotes = notes.slice(0, 13);
+
+  // Pin note
   const pinNote = async (id) => {
     await updateDoc(doc(db, "users", user.uid, "notes", id), {
       pinned: true,
     });
+  };
+
+  // Note popup
+  const [showNotePopup, setShowNotePopup] = useState(false);
+  const [notePopupData, setNotePopupData] = useState(null);
+  const showNoteOnClick = (note) => {
+    setNotePopupData(note);
+    setShowNotePopup(true);
   };
   return (
     <div className="border-2 border-bg-white/50 rounded-lg p-8 text-bg-white grow relative overflow-clip">
@@ -25,11 +38,6 @@ function RecentNotes({ notes, user }) {
               Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
               Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
               Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
-              Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
-              Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
-              Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
-              Add Note &bull; Add Note &bull; Add Note &bull; Add Note &bull;
-              Add Note &bull; Add Note &bull; Add Note &bull; Add Note
             </h3>
           </div>
         </Link>
@@ -37,6 +45,7 @@ function RecentNotes({ notes, user }) {
           <div
             className="border rounded-lg p-4 relative bg-bg-white/20 backdrop-blur-lg border-white/30 shadow-md group"
             key={note.id}
+            onClick={() => showNoteOnClick(note)}
           >
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-xl">{note.title}</h3>
@@ -50,7 +59,7 @@ function RecentNotes({ notes, user }) {
                       year: "numeric",
                     }
                   )}
-                </p>{" "}
+                </p>
                 <button
                   className={clsx(
                     "hover:text-green-400 hover:scale-125 transition duration-300 ease-out",
@@ -64,8 +73,13 @@ function RecentNotes({ notes, user }) {
               </div>
             </div>
             <p
-              className="text-sm opacity-50"
-              dangerouslySetInnerHTML={{ __html: note.note }}
+              className="text-sm opacity-50 pt-2 flex"
+              dangerouslySetInnerHTML={{
+                __html:
+                  note.note.length > 40
+                    ? note.note.slice(0, 40) + "..."
+                    : note.note,
+              }}
             ></p>
           </div>
         ))}
@@ -76,6 +90,13 @@ function RecentNotes({ notes, user }) {
         objectFit="cover"
         className="z-0"
       ></Image>
+      {showNotePopup && notePopupData && (
+        <NotePopup
+          note={notePopupData}
+          open={showNotePopup}
+          setOpen={setShowNotePopup}
+        />
+      )}
     </div>
   );
 }
