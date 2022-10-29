@@ -22,8 +22,6 @@ function Notes() {
 
   if (!user && !loading) return router.push("/");
 
-  console.log(notes);
-
   return (
     user &&
     notes && (
