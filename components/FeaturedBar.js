@@ -2,7 +2,18 @@ import { BsPinAngleFill } from "react-icons/bs";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../util/firebase";
 import Image from "next/image";
+import NotePopup from "./NotePopup";
+import { useState } from "react";
+
 function FeaturedBar({ notes, user }) {
+  // Note popup
+  const [showNotePopup, setShowNotePopup] = useState(false);
+  const [notePopupData, setNotePopupData] = useState(null);
+  const showNoteOnClick = (note) => {
+    setNotePopupData(note);
+    setShowNotePopup(true);
+  };
+
   const unpinNote = async (id) => {
     await updateDoc(doc(db, "users", user.uid, "notes", id), {
       pinned: false,
@@ -18,6 +29,7 @@ function FeaturedBar({ notes, user }) {
             <div
               className="border rounded-lg p-4 relative bg-bg-white/20 backdrop-blur-lg border-white/30 shadow-md"
               key={note.id}
+              onClick={() => showNoteOnClick(note)}
             >
               <button
                 className="absolute -right-2 -top-3 text-xl text-green-400 hover:text-red-400 hover:scale-125 transition duration-300 ease-out"
@@ -50,6 +62,15 @@ function FeaturedBar({ notes, user }) {
         objectPosition={"top"}
         className="z-0 absolute top-0 left-0"
       ></Image>
+
+      {showNotePopup && notePopupData && (
+        <NotePopup
+          note={notePopupData}
+          open={showNotePopup}
+          setOpen={setShowNotePopup}
+          user={user}
+        />
+      )}
     </div>
   );
 }
