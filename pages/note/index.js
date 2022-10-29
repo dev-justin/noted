@@ -33,7 +33,7 @@ function Notes() {
           <Navigation />
           {/* Main Content */}
           <main className="grow pl-4 flex flex-col gap-4">
-            <NotesTable notes={notes} />
+            <NotesTable notes={notes} user={user} />
           </main>
         </div>
       </div>

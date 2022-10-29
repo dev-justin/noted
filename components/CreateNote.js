@@ -35,8 +35,6 @@ function CreateNote({ uid, noteId }) {
       pinned: editNote ? editNote.pinned : false,
     },
     onSubmit: async (values) => {
-      console.log(values, note ? note : editNote.note);
-
       // If noteId is present then update note in firestore
       if (noteId && uid) {
         await updateDoc(doc(db, "users", uid, "notes", noteId), {
@@ -64,10 +62,10 @@ function CreateNote({ uid, noteId }) {
   });
 
   return (
-    <div className="border-2 border-white/50 rounded-lg p-8 h-full overflow-hidden relative flex justify-center items-center ">
+    <div className="border-2 border-white/50 rounded-lg px-2 sm:p-8 h-full overflow-hidden relative flex justify-center items-center ">
       <div className="w-full flex flex-col z-10 relative bg-white/40 backdrop-blur-lg rounded-lg px-8 py-4 border-2 border-white/40 shadow-lg max-w-[900px]">
-        <div className="relative flex sm:justify-center items-center pb-2">
-          <div className="sm:absolute left-0 bottom-0">
+        <div className="relative flex lg:justify-center items-center flex-col pb-2 gap-4">
+          <div className="lg:absolute left-0 top-2">
             <Link href="/mind">
               <div>
                 <a className="text-bg-white uppercase font-bold inline-flex items-center gap-2 border px-4 py-1 rounded-full hover:bg-bg-white hover:text-bg-black active:scale-95 transition duration-300 ease-out">
@@ -78,7 +76,7 @@ function CreateNote({ uid, noteId }) {
             </Link>
           </div>
           <div>
-            <h1 className="text-bg-white text-4xl font-bold hidden sm:block">
+            <h1 className="text-bg-white text-4xl font-bold hidden md:block">
               {/* If there is a note id say Edit Note else say Create your note. */}
               {noteId ? "Edit Note" : "Create your note"}
             </h1>
@@ -136,7 +134,7 @@ function CreateNote({ uid, noteId }) {
             <ReactQuill
               theme="snow"
               onChange={setNote}
-              className="text-bg-white rounded-lg h-[calc(100vh-451px)]"
+              className="text-bg-white rounded-lg h-[calc(100vh-500px)] mb-12 sm:mb-0 sm:h-[calc(100vh-451px)]"
               defaultValue={editNote ? editNote.note : ""}
             />
           )}

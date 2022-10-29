@@ -26,7 +26,7 @@ function RecentNotes({ notes, user }) {
   };
   return (
     <div className="border-2 border-bg-white/50 rounded-lg p-8 text-bg-white grow relative overflow-clip">
-      <div className="relative z-10 grid grid-cols-4 grid-rows-1 gap-4 ">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 grid-rows-1 gap-4 ">
         <Link href="/note/create">
           <button className="border row-span-full  rounded-lg p-4 flex justify-center items-center hover:bg-bg-white group transition duration-300 active:scale-95 relative overflow-hidden bg-bg-white/20 backdrop-blur-lg border-white/30 shadow-md">
             <BsPlusCircleDotted className="text-5xl group-hover:text-bg-black" />
@@ -47,10 +47,10 @@ function RecentNotes({ notes, user }) {
             key={note.id}
             onClick={() => showNoteOnClick(note)}
           >
-            <div className="flex items-center justify-between">
-              <h3 className="font-bold text-xl">{note.title}</h3>
+            <div className="flex items-center justify-between gap-2 flex-wrap md:flex-nowrap">
+              <h3 className="font-bold md:text-xl">{note.title}</h3>
               <div className="flex items-center gap-2">
-                <p className="text-sm opacity-50">
+                <p className="text-xs md:text-sm opacity-50">
                   {new Date(note.date.seconds * 1000).toLocaleDateString(
                     "en-US",
                     {
@@ -62,7 +62,7 @@ function RecentNotes({ notes, user }) {
                 </p>
                 <span
                   className={clsx(
-                    " transition duration-300 ease-out",
+                    " transition duration-300 ease-out hidden md:inline-flex",
                     (note.pinned && "text-green-400/40") || "text-white/40"
                   )}
                 >
@@ -71,7 +71,7 @@ function RecentNotes({ notes, user }) {
               </div>
             </div>
             <p
-              className="text-sm opacity-50 pt-2 flex"
+              className="text-sm opacity-50 pt-2 hidden md:flex"
               dangerouslySetInnerHTML={{
                 __html:
                   note.note.length > 40

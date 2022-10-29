@@ -1,7 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import NotePopup from "./NotePopup";
 
-function NotesTable({ notes }) {
+function NotesTable({ notes, user }) {
+  // Note popup
+  const [showNotePopup, setShowNotePopup] = useState(false);
+  const [notePopupData, setNotePopupData] = useState(null);
+  const showNoteOnClick = (note) => {
+    setNotePopupData(note);
+    setShowNotePopup(true);
+  };
   return (
     <div className="border-2 border-bg-white/50 rounded-lg p-8 text-bg-white grow relative overflow-clip">
       <div className="relative z-10 grid-rows-1 gap-4">
@@ -26,25 +35,25 @@ function NotesTable({ notes }) {
           <div className="mt-8 flex flex-col">
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-                <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                  <table className="min-w-full divide-y divide-gray-300 bg-white/50 backdrop-blur-sm max-h-full overflow-scroll">
+                <div className="overflow-x shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                  <table className="divide-y divide-gray-300 bg-white/20 backdrop-blur-sm max-h-full overflow-scroll shadow-lg w-full">
                     <thead className="bg-black/50">
                       <tr>
                         <th
                           scope="col"
-                          className="py-3.5 pl-4 pr-3 text-left font-bold sm:pl-6"
-                        >
-                          Note
-                        </th>
-                        <th
-                          scope="col"
-                          className="px-3 py-3.5 text-left font-bold"
+                          className="py-3.5 pl-4 pr-3 text-left font-bold hidden md:block"
                         >
                           Date
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left font-bold"
+                          className="px-6 py-3.5 text-left font-bold"
+                        >
+                          Note
+                        </th>
+                        <th
+                          scope="col"
+                          className="px-3 py-3.5 text-left font-bold hidden md:block"
                         >
                           Pinned
                         </th>
@@ -59,7 +68,7 @@ function NotesTable({ notes }) {
                     <tbody className="divide-y divide-gray-200 text-white font-semibold">
                       {notes.map((note) => (
                         <tr key={note.id}>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          <td className="whitespace-nowrap px-3 py-4 text-sm hidden md:block">
                             {new Date(
                               note.date.seconds * 1000
                             ).toLocaleDateString("en-US", {
@@ -71,23 +80,16 @@ function NotesTable({ notes }) {
                           <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                             <div className="font-medium">{note.title}</div>
                           </td>
-                          {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden md:block">
                             <span className="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800">
-                              Active
+                              {note.pinned ? "Yes" : "No"}
                             </span>
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            {person.role}
-                          </td>
                           <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                            <a
-                              href="#"
-                              className="text-indigo-600 hover:text-indigo-900"
-                            >
-                              Edit
-                              <span className="sr-only">, {person.name}</span>
-                            </a>
-                          </td> */}
+                            <button onClick={() => showNoteOnClick(note)}>
+                              Open Note
+                            </button>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -104,6 +106,14 @@ function NotesTable({ notes }) {
         objectFit="cover"
         className="z-0"
       ></Image>
+      {showNotePopup && notePopupData && (
+        <NotePopup
+          note={notePopupData}
+          open={showNotePopup}
+          setOpen={setShowNotePopup}
+          user={user}
+        />
+      )}
     </div>
   );
 }

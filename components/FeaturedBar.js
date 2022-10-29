@@ -24,7 +24,7 @@ function FeaturedBar({ notes, user }) {
     <div className="border-2 border-bg-white/50 rounded-lg px-8 pt-4 pb-8 text-bg-white relative overflow-clip">
       <div className="z-10 relative">
         <h1 className="font-bold text-xl pb-4">Pinned Notes</h1>
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-4">
           {notes.map((note) => (
             <div
               className="border rounded-lg p-4 relative bg-bg-white/20 backdrop-blur-lg border-white/30 shadow-md"
@@ -37,9 +37,9 @@ function FeaturedBar({ notes, user }) {
               >
                 <BsPinAngleFill />
               </button>
-              <div className="flex items-center justify-between">
-                <h3 className="font-bold text-xl">{note.title}</h3>
-                <p className="text-sm opacity-50">
+              <div className="flex items-center justify-between flex-wrap md:flex-nowrap gap-2">
+                <h3 className="font-bold md:text-xl">{note.title}</h3>
+                <p className="text-xs md:text-sm opacity-50">
                   {new Date(note.date.seconds * 1000).toLocaleDateString(
                     "en-US",
                     {
