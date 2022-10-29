@@ -60,16 +60,14 @@ function RecentNotes({ notes, user }) {
                     }
                   )}
                 </p>
-                <button
+                <span
                   className={clsx(
-                    "hover:text-green-400 hover:scale-125 transition duration-300 ease-out",
-                    (note.pinned && "text-green-400/40 hover:scale-100") ||
-                      "text-white/40"
+                    " transition duration-300 ease-out",
+                    (note.pinned && "text-green-400/40") || "text-white/40"
                   )}
-                  onClick={() => pinNote(note.id)}
                 >
                   <BsPinAngleFill />
-                </button>
+                </span>
               </div>
             </div>
             <p
@@ -95,6 +93,7 @@ function RecentNotes({ notes, user }) {
           note={notePopupData}
           open={showNotePopup}
           setOpen={setShowNotePopup}
+          user={user}
         />
       )}
     </div>

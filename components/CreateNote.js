@@ -14,27 +14,49 @@ import { BiArrowBack } from "react-icons/bi";
 import { useFormik } from "formik";
 
 // Firebase
-import { collection, doc, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "../util/firebase";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
-function CreateNote({ uid }) {
+function CreateNote({ uid, noteId }) {
+  // If noteId is present then get note from firestore
+  const [editNote, loading] = useDocumentData(
+    noteId && uid
+      ? doc(db, "users", uid, "notes", noteId) // Get note from firestore
+      : null
+  );
+
   const router = useRouter();
   const [note, setNote] = useState("");
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: "",
-      pinned: false,
+      title: editNote ? editNote.title : "",
+      pinned: editNote ? editNote.pinned : false,
     },
     onSubmit: async (values) => {
-      const newDocRef = doc(collection(db, "users", uid, "notes"));
-      await setDoc(newDocRef, {
-        title: values.title,
-        note: note,
-        date: new Date(),
-        uid,
-        id: newDocRef.id,
-        pinned: values.pinned,
-      });
+      console.log(values, note ? note : editNote.note);
+
+      // If noteId is present then update note in firestore
+      if (noteId && uid) {
+        await updateDoc(doc(db, "users", uid, "notes", noteId), {
+          title: values.title,
+          note: note ? note : editNote.note,
+          pinned: values.pinned,
+          date: new Date(),
+        });
+      } else {
+        const newDocRef = doc(collection(db, "users", uid, "notes"));
+        await setDoc(newDocRef, {
+          title: values.title,
+          note: note,
+          date: new Date(),
+          uid,
+          id: newDocRef.id,
+          pinned: values.pinned,
+        });
+      }
+
       values.title = "";
       setNote("");
       router.push("/mind");
@@ -57,7 +79,8 @@ function CreateNote({ uid }) {
           </div>
           <div>
             <h1 className="text-bg-white text-4xl font-bold hidden sm:block">
-              Create your note.
+              {/* If there is a note id say Edit Note else say Create your note. */}
+              {noteId ? "Edit Note" : "Create your note"}
             </h1>
           </div>
         </div>
@@ -96,6 +119,7 @@ function CreateNote({ uid }) {
                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                   onChange={formik.handleChange}
                   value={true}
+                  checked={formik.values.pinned}
                 />
               </div>
               <div className="ml-3 text-sm">
@@ -108,12 +132,14 @@ function CreateNote({ uid }) {
               </div>
             </div>
           </fieldset>
-          <ReactQuill
-            theme="snow"
-            value={note}
-            onChange={setNote}
-            className="text-bg-white rounded-lg h-[calc(100vh-451px)]"
-          />
+          {!loading && (
+            <ReactQuill
+              theme="snow"
+              onChange={setNote}
+              className="text-bg-white rounded-lg h-[calc(100vh-451px)]"
+              defaultValue={editNote ? editNote.note : ""}
+            />
+          )}
           <button
             type="submit"
             className="w-full py-4 rounded-lg font-bold text-bg-white border-2 hover:bg-bg-white hover:text-bg-black transition duration-300 active:scale-95 mt-12 border-bg-white"

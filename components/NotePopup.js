@@ -2,8 +2,27 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { FiEdit3, FiTrash2 } from "react-icons/fi";
 import { BsPinAngleFill } from "react-icons/bs";
+import { doc, updateDoc, deleteDoc } from "firebase/firestore";
+import { db } from "../util/firebase";
+import { useState } from "react";
+import clsx from "clsx";
+import Link from "next/link";
 
-function NotePopup({ open, setOpen, note }) {
+function NotePopup({ open, setOpen, note, user }) {
+  const [pin, setPin] = useState(note.pinned);
+  // Pin note
+  const pinNote = async (id) => {
+    await updateDoc(doc(db, "users", user.uid, "notes", id), {
+      pinned: !pin,
+    });
+    setPin(!pin);
+  };
+
+  const deleteNote = async (id) => {
+    await deleteDoc(doc(db, "users", user.uid, "notes", id));
+    setOpen(false);
+  };
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -55,13 +74,29 @@ function NotePopup({ open, setOpen, note }) {
                   }}
                 ></p>
                 <div className="flex gap-4 pt-8 border-t-2 border-white/20 mt-8 justify-center">
-                  <button className="bg-white/70 backdrop-blur-sm p-4 h-12 w-12 rounded-full border-2 border-white/40 font-semibold flex items-center gap-3">
+                  <button
+                    className={clsx(
+                      "bg-white/70 backdrop-blur-sm p-4 h-12 w-12 rounded-full border-2 border-white/40 font-semibold flex items-center gap-3 hover:bg-white/80 hover:scale-110 transition duration-300 ease-out active:scale-95",
+                      pin && "bg-green-400/20"
+                    )}
+                    onClick={() => pinNote(note.id)}
+                  >
                     <BsPinAngleFill />
                   </button>
-                  <button className="bg-white/70 backdrop-blur-sm p-4 h-12 w-12 rounded-full border-2 border-white/40 font-semibold flex items-center gap-3">
-                    <FiEdit3 />
-                  </button>
-                  <button className="bg-red-400/70 backdrop-blur-sm p-4 h-12 w-12 rounded-full border-2 border-red-300/40 font-semibold flex items-center gap-3">
+                  <Link
+                    href={{
+                      pathname: "/note/edit",
+                      query: { id: note.id },
+                    }}
+                  >
+                    <button className="bg-white/70 backdrop-blur-sm p-4 h-12 w-12 rounded-full border-2 border-white/40 font-semibold flex items-center gap-3 hover:bg-white/80 hover:scale-110 transition duration-300 ease-out active:scale-95">
+                      <FiEdit3 />
+                    </button>
+                  </Link>
+                  <button
+                    className="bg-red-400/70 backdrop-blur-sm p-4 h-12 w-12 rounded-full border-2 border-red-300/40 font-semibold flex items-center gap-3 hover:bg-red-400/80 hover:scale-110 transition duration-300 ease-out active:scale-95"
+                    onClick={() => deleteNote(note.id)}
+                  >
                     <FiTrash2 />
                   </button>
                 </div>
